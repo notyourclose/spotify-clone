@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Hub - Your Ultimate Music Experience</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            background-color: #121212;
+            color: white;
+        }
+
+        /* Main Layout */
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 240px;
+            background-color: #000000;
+            padding: 20px;
+        }
+
+        .logo {
+            width: 130px;
+            margin-bottom: 30px;
+            filter: brightness(0) saturate(100%) invert(71%) sepia(51%) saturate(555%) hue-rotate(93deg) brightness(89%) contrast(88%);
+        }
+
+        .nav-links {
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-bottom: 15px;
+        }
+
+        .nav-links a {
+            color: #b3b3b3;
+            text-decoration: none;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-links a.active {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-links i {
+            font-size: 20px;
+            width: 24px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            background-color: #121212;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        /* Top Bar */
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: white;
+            border-radius: 20px;
+            padding: 6px 15px;
+            width: 300px;
+        }
+
+        .search-bar input {
+            border: none;
+            background: none;
+            outline: none;
+            padding: 5px;
+            font-size: 14px;
+            width: 100%;
+        }
+
+        .search-bar button {
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Playlists */
+        .playlist-section {
+            margin-bottom: 40px;
+        }
+
+        .playlist-section h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .playlist-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 20px;
+        }
+
+        .playlist-card {
+            background: #282828;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .playlist-card:hover {
+            background: #383838;
+        }
+
+        .playlist-card img {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 60px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease;
+        }
+
+        .playlist-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .playlist-card h4 {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .playlist-card p {
+            font-size: 12px;
+            color: #b3b3b3;
+        }
+
+        /* Player */
+        .player {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 90px;
+            background-color: #181818;
+            border-top: 1px solid #282828;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .song-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            width: 30%;
+        }
+
+        .song-info img {
+            width: 56px;
+            height: 56px;
+            border-radius: 4px;
+        }
+
+        .song-details h4 {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .song-details p {
+            font-size: 12px;
+            color: #b3b3b3;
+        }
+
+        .player-controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 40%;
+        }
+
+        .control-buttons {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 10px;
+        }
+
+        .control-buttons button {
+            background: none;
+            border: none;
+            color: #b3b3b3;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .control-buttons .play-btn {
+            font-size: 32px;
+        }
+
+        .control-buttons button:hover {
+            color: white;
+        }
+
+        .progress-bar {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 12px;
+            color: #b3b3b3;
+        }
+
+        .progress {
+            flex: 1;
+            height: 4px;
+            background: #4f4f4f;
+            border-radius: 2px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .progress-filled {
+            height: 100%;
+            background: #1db954;
+            border-radius: 2px;
+            width: 0%;
+        }
+
+        .volume-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 30%;
+            justify-content: flex-end;
+        }
+
+        .volume-bar {
+            width: 100px;
+            height: 4px;
+            background: #4f4f4f;
+            border-radius: 2px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .volume-filled {
+            height: 100%;
+            background: #1db954;
+            border-radius: 2px;
+            width: 70%;
+        }
+
+        /* Search Results */
+        .search-results {
+            padding: 20px;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .result-card {
+            background: #282828;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .result-card:hover {
+            background: #383838;
+        }
+
+        .result-card img {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 60px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease;
+        }
+
+        .result-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .genre-tag {
+            display: inline-block;
+            padding: 4px 8px;
+            background: #1db954;
+            color: white;
+            border-radius: 12px;
+            font-size: 10px;
+            margin-top: 8px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 80px;
+                padding: 10px;
+            }
+
+            .sidebar span {
+                display: none;
+            }
+
+            .logo {
+                width: 40px;
+            }
+
+            .search-bar {
+                width: 200px;
+            }
+
+            .playlist-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+        }
+
+        /* Active section highlight */
+        .section-active {
+            display: block !important;
+        }
+
+        .section-inactive {
+            display: none !important;
+        }
+
+        .player .cover {
+            width: 56px;
+            height: 56px;
+            border-radius: 4px;
+            object-fit: cover;
+            margin-right: 16px;
+            outline: none;  /* Remove any outline */
+            border: none;   /* Remove any border */
+        }
+
+        .player .cover img {
+            width: 100%;
+            height: 100%;
+            border-radius: 4px;
+            object-fit: cover;
+            outline: none;  /* Remove any outline */
+            border: none;   /* Remove any border */
+        }
+
+        .song-info .cover-text {
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            pointer-events: none;
+            color: #b3b3b3;
+            outline: none;
+        }
+
+        .song-info *:focus {
+            outline: none !important;
+        }
+
+        .song-info *::selection {
+            background: transparent;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <img src="https://storage.googleapis.com/pr-newsroom-wp/1/2018/11/Spotify_Logo_RGB_White.png" alt="Music Hub" class="logo">
+            <ul class="nav-links">
+                <li><a href="#home" class="active" onclick="switchSection('home')"><i class="fas fa-home"></i><span>Home</span></a></li>
+                <li><a href="#search" onclick="switchSection('search')"><i class="fas fa-search"></i><span>Search</span></a></li>
+                <li><a href="#library" onclick="switchSection('library')"><i class="fas fa-book"></i><span>Your Library</span></a></li>
+                <li><a href="#create-playlist" onclick="switchSection('create-playlist')"><i class="fas fa-plus-square"></i><span>Create Playlist</span></a></li>
+                <li><a href="#liked-songs" onclick="switchSection('liked-songs')"><i class="fas fa-heart"></i><span>Liked Songs</span></a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Top Bar -->
+            <div class="topbar">
+                <div class="search-bar">
+                    <input type="text" id="search-input" placeholder="Search for Songs, Artists, or Playlists">
+                    <button><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+
+            <!-- Search Results -->
+            <div class="search-results" style="display: none;">
+                <h2>Search Results</h2>
+                <div class="results-grid"></div>
+            </div>
+
+            <!-- Music Content -->
+            <div class="music-content">
+                <!-- Playlists will be dynamically added here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Player -->
+    <div class="player">
+        <div class="song-info">
+            <img src="https://picsum.photos/56/56" alt="Cover" class="song-cover">
+            <div class="song-details">
+                <h4>Song Title</h4>
+                <p>Artist Name</p>
+            </div>
+            <button class="like-btn"><i class="far fa-heart"></i></button>
+        </div>
+
+        <div class="player-controls">
+            <div class="control-buttons">
+                <button class="shuffle-btn"><i class="fas fa-random"></i></button>
+                <button class="prev-btn"><i class="fas fa-step-backward"></i></button>
+                <button class="play-btn"><i class="fas fa-play-circle"></i></button>
+                <button class="next-btn"><i class="fas fa-step-forward"></i></button>
+                <button class="repeat-btn"><i class="fas fa-redo"></i></button>
+            </div>
+            <div class="progress-bar">
+                <span>0:00</span>
+                <div class="progress">
+                    <div class="progress-filled"></div>
+                </div>
+                <span>0:00</span>
+            </div>
+        </div>
+
+        <div class="volume-controls">
+            <button><i class="fas fa-volume-up"></i></button>
+            <div class="volume-bar">
+                <div class="volume-filled"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Song Database
+        const songDatabase = [
+            // Pop Songs
+            ...Array(30).fill().map((_, i) => ({
+                id: `pop_${i + 1}`,
+                title: `Pop Hit ${i + 1}`,
+                artist: ['Ed Sheeran', 'Taylor Swift', 'The Weeknd', 'Ariana Grande', 'Justin Bieber'][Math.floor(Math.random() * 5)],
+                duration: Math.floor(Math.random() * (240 - 180 + 1)) + 180,
+                cover: `https://picsum.photos/300/300?random=${i}`,
+                genre: 'Pop',
+                language: 'English',
+                likes: Math.floor(Math.random() * 1000000)
+            })),
+            // Rock Songs
+            ...Array(30).fill().map((_, i) => ({
+                id: `rock_${i + 1}`,
+                title: `Rock Anthem ${i + 1}`,
+                artist: ['Queen', 'Led Zeppelin', 'AC/DC', 'Guns N\' Roses', 'Metallica'][Math.floor(Math.random() * 5)],
+                duration: Math.floor(Math.random() * (300 - 240 + 1)) + 240,
+                cover: `https://picsum.photos/300/300?random=${i + 30}`,
+                genre: 'Rock',
+                language: 'English',
+                likes: Math.floor(Math.random() * 1000000)
+            })),
+            // Hip Hop Songs
+            ...Array(30).fill().map((_, i) => ({
+                id: `hiphop_${i + 1}`,
+                title: `Hip Hop Beat ${i + 1}`,
+                artist: ['Drake', 'Kendrick Lamar', 'Eminem', 'Travis Scott', 'Post Malone'][Math.floor(Math.random() * 5)],
+                duration: Math.floor(Math.random() * (240 - 180 + 1)) + 180,
+                cover: `https://picsum.photos/300/300?random=${i + 60}`,
+                genre: 'Hip Hop',
+                language: 'English',
+                likes: Math.floor(Math.random() * 1000000)
+            })),
+            // K-Pop Songs
+            ...Array(30).fill().map((_, i) => ({
+                id: `kpop_${i + 1}`,
+                title: `K-Pop Hit ${i + 1}`,
+                artist: ['BTS', 'BLACKPINK', 'TWICE', 'EXO', 'Red Velvet'][Math.floor(Math.random() * 5)],
+                duration: Math.floor(Math.random() * (240 - 180 + 1)) + 180,
+                cover: `https://picsum.photos/300/300?random=${i + 90}`,
+                genre: 'K-Pop',
+                language: 'Korean',
+                likes: Math.floor(Math.random() * 1000000)
+            })),
+            // Bollywood Songs
+            ...Array(30).fill().map((_, i) => ({
+                id: `bollywood_${i + 1}`,
+                title: `Bollywood Hit ${i + 1}`,
+                artist: ['Arijit Singh', 'Neha Kakkar', 'Shreya Ghoshal', 'Atif Aslam', 'Badshah'][Math.floor(Math.random() * 5)],
+                duration: Math.floor(Math.random() * (240 - 180 + 1)) + 180,
+                cover: `https://picsum.photos/300/300?random=${i + 120}`,
+                genre: 'Bollywood',
+                language: 'Hindi',
+                likes: Math.floor(Math.random() * 1000000)
+            })),
+            // Latin Songs
+            ...Array(30).fill().map((_, i) => ({
+                id: `latin_${i + 1}`,
+                title: `Latin Hit ${i + 1}`,
+                artist: ['Bad Bunny', 'J Balvin', 'Maluma', 'Daddy Yankee', 'Ozuna'][Math.floor(Math.random() * 5)],
+                duration: Math.floor(Math.random() * (240 - 180 + 1)) + 180,
+                cover: `https://picsum.photos/300/300?random=${i + 150}`,
+                genre: 'Latin',
+                language: 'Spanish',
+                likes: Math.floor(Math.random() * 1000000)
+            })),
+            // J-Pop Songs
+            ...Array(30).fill().map((_, i) => ({
+                id: `jpop_${i + 1}`,
+                title: `J-Pop Hit ${i + 1}`,
+                artist: ['RADWIMPS', 'Official HIGE DANdism', 'YOASOBI', 'LiSA', 'King Gnu'][Math.floor(Math.random() * 5)],
+                duration: Math.floor(Math.random() * (240 - 180 + 1)) + 180,
+                cover: `https://picsum.photos/300/300?random=${i + 180}`,
+                genre: 'J-Pop',
+                language: 'Japanese',
+                likes: Math.floor(Math.random() * 1000000)
+            })),
+            // Arabic Songs
+            ...Array(30).fill().map((_, i) => ({
+                id: `arabic_${i + 1}`,
+                title: `Arabic Hit ${i + 1}`,
+                artist: ['Amr Diab', 'Nancy Ajram', 'Tamer Hosny', 'Elissa', 'Saad Lamjarred'][Math.floor(Math.random() * 5)],
+                duration: Math.floor(Math.random() * (240 - 180 + 1)) + 180,
+                cover: `https://picsum.photos/300/300?random=${i + 210}`,
+                genre: 'Arabic',
+                language: 'Arabic',
+                likes: Math.floor(Math.random() * 1000000)
+            })),
+            // Uvindu Ayshcharya Songs
+            {
+                id: 'uvindu_1',
+                title: 'Sanda Wage',
+                artist: 'Uvindu Ayshcharya',
+                duration: 234,
+                cover: 'https://i.ytimg.com/vi/mYWVoqX0Ns8/maxresdefault.jpg',
+                genre: 'Modern Sinhala',
+                language: 'Sinhala',
+                likes: Math.floor(Math.random() * 1000000)
+            },
+            {
+                id: 'uvindu_2',
+                title: 'Adare Hithenawa',
+                artist: 'Uvindu Ayshcharya',
+                duration: 245,
+                cover: 'https://i.ytimg.com/vi/Yw4UZHbvxEQ/maxresdefault.jpg',
+                genre: 'Modern Sinhala',
+                language: 'Sinhala',
+                likes: Math.floor(Math.random() * 1000000)
+            },
+            {
+                id: 'uvindu_3',
+                title: 'Sithata Danena',
+                artist: 'Uvindu Ayshcharya',
+                duration: 228,
+                cover: 'https://i.ytimg.com/vi/q0NSPLnTSVE/maxresdefault.jpg',
+                genre: 'Modern Sinhala',
+                language: 'Sinhala',
+                likes: Math.floor(Math.random() * 1000000)
+            },
+            // Dilubeats Songs
+            {
+                id: 'dilubeats_1',
+                title: 'Sansare',
+                artist: 'Dilubeats',
+                duration: 256,
+                cover: 'https://i.ytimg.com/vi/7PXoJQwfX1k/maxresdefault.jpg',
+                genre: 'Modern Sinhala',
+                language: 'Sinhala',
+                likes: Math.floor(Math.random() * 1000000)
+            },
+            {
+                id: 'dilubeats_2',
+                title: 'Pem Rasa',
+                artist: 'Dilubeats',
+                duration: 242,
+                cover: 'https://i.ytimg.com/vi/IuPeC9woRrc/maxresdefault.jpg',
+                genre: 'Modern Sinhala',
+                language: 'Sinhala',
+                likes: Math.floor(Math.random() * 1000000)
+            },
+            {
+                id: 'dilubeats_3',
+                title: 'Ran Tharu',
+                artist: 'Dilubeats',
+                duration: 238,
+                cover: 'https://i.ytimg.com/vi/xhw4vA5UBEQ/maxresdefault.jpg',
+                genre: 'Modern Sinhala',
+                language: 'Sinhala',
+                likes: Math.floor(Math.random() * 1000000)
+            },
+            // Mihiran Songs
+            {
+                id: 'mihiran_1',
+                title: 'Sithata Duka',
+                artist: 'Mihiran',
+                duration: 247,
+                cover: 'https://i.ytimg.com/vi/8UZqKE1P6qQ/maxresdefault.jpg',
+                genre: 'Modern Sinhala',
+                language: 'Sinhala',
+                likes: Math.floor(Math.random() * 1000000)
+            },
+            {
+                id: 'mihiran_2',
+                title: 'Mage Adare',
+                artist: 'Mihiran',
+                duration: 235,
+                cover: 'https://i.ytimg.com/vi/2ZqXOZJ6Ydw/maxresdefault.jpg',
+                genre: 'Modern Sinhala',
+                language: 'Sinhala',
+                likes: Math.floor(Math.random() * 1000000)
+            },
+            {
+                id: 'mihiran_3',
+                title: 'Sanda Eliya',
+                artist: 'Mihiran',
+                duration: 251,
+                cover: 'https://i.ytimg.com/vi/yYXKTZX7oXs/maxresdefault.jpg',
+                genre: 'Modern Sinhala',
+                language: 'Sinhala',
+                likes: Math.floor(Math.random() * 1000000)
+            },
+            // Iman Fernando Songs
+            {
+                id: 'iman_1',
+                title: 'Mage Hitha',
+                artist: 'Iman Fernando',
+                duration: 244,
+                cover: 'https://i.ytimg.com/vi/7PpYxqJvTyc/maxresdefault.jpg',
+                genre: 'Modern Sinhala',
+                language: 'Sinhala',
+                likes: Math.floor(Math.random() * 1000000)
+            },
+            {
+                id: 'iman_2',
+                title: 'Sanda Renu',
+                artist: 'Iman Fernando',
+                duration: 239,
+                cover: 'https://i.ytimg.com/vi/Qpq6XhqQVBo/maxresdefault.jpg',
+                genre: 'Modern Sinhala',
+                language: 'Sinhala',
+                likes: Math.floor(Math.random() * 1000000)
+            },
+            {
+                id: 'iman_3',
+                title: 'Pem Sihine',
+                artist: 'Iman Fernando',
+                duration: 248,
+                cover: 'https://i.ytimg.com/vi/4ZHwu0uut3k/maxresdefault.jpg',
+                genre: 'Modern Sinhala',
+                language: 'Sinhala',
+                likes: Math.floor(Math.random() * 1000000)
+            },
+            // Ramidu Songs
+            {
+                id: 'ramidu_1',
+                title: 'Mal Pane',
+                artist: 'Ramidu',
+                duration: 241,
+                cover: 'https://i.ytimg.com/vi/S2Ll5PZQwrY/maxresdefault.jpg',
+                genre: 'Modern Sinhala',
+                language: 'Sinhala',
+                likes: Math.floor(Math.random() * 1000000)
+            },
+            {
+                id: 'ramidu_2',
+                title: 'Sithata Danena',
+                artist: 'Ramidu',
+                duration: 237,
+                cover: 'https://i.ytimg.com/vi/0ErQu6OxFHU/maxresdefault.jpg',
+                genre: 'Modern Sinhala',
+                language: 'Sinhala',
+                likes: Math.floor(Math.random() * 1000000)
+            },
+            {
+                id: 'ramidu_3',
+                title: 'Adare Hithenawa',
+                artist: 'Ramidu',
+                duration: 246,
+                cover: 'https://i.ytimg.com/vi/JD9pGKZQHHw/maxresdefault.jpg',
+                genre: 'Modern Sinhala',
+                language: 'Sinhala',
+                likes: Math.floor(Math.random() * 1000000)
+            }
+        ];
+
+        // Player State
+        let currentSongIndex = 0;
+        let isPlaying = false;
+        let isShuffled = false;
+        let repeatMode = 'none'; // none, one, all
+        let volume = 0.7;
+        let currentTime = 0;
+        let playbackInterval;
+        let previousVolume = 0.7;
+
+        // DOM Elements
+        const playBtn = document.querySelector('.play-btn');
+        const prevBtn = document.querySelector('.prev-btn');
+        const nextBtn = document.querySelector('.next-btn');
+        const shuffleBtn = document.querySelector('.shuffle-btn');
+        const repeatBtn = document.querySelector('.repeat-btn');
+        const likeBtn = document.querySelector('.like-btn');
+        const progressBar = document.querySelector('.progress');
+        const progressFilled = document.querySelector('.progress-filled');
+        const currentTimeDisplay = document.querySelector('.progress-bar span:first-child');
+        const totalTimeDisplay = document.querySelector('.progress-bar span:last-child');
+        const volumeBar = document.querySelector('.volume-bar');
+        const volumeFilled = document.querySelector('.volume-filled');
+        const searchInput = document.getElementById('search-input');
+        const searchResults = document.querySelector('.search-results');
+        const resultsGrid = document.querySelector('.results-grid');
+        const musicContent = document.querySelector('.music-content');
+
+        // Format time function
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = Math.floor(seconds % 60);
+            return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+        }
+
+        // Update song info
+        function updateSongInfo(song) {
+            document.querySelector('.song-info img').src = song.cover;
+            document.querySelector('.song-details h4').textContent = song.title;
+            document.querySelector('.song-details p').textContent = song.artist;
+            totalTimeDisplay.textContent = formatTime(song.duration);
+            currentTimeDisplay.textContent = '0:00';
+            progressFilled.style.width = '0%';
+        }
+
+        // Playback functions
+        function togglePlay() {
+            isPlaying = !isPlaying;
+            playBtn.innerHTML = isPlaying ? '<i class="fas fa-pause-circle"></i>' : '<i class="fas fa-play-circle"></i>';
+            if (isPlaying) {
+                startPlayback();
+            } else {
+                stopPlayback();
+            }
+        }
+
+        function startPlayback() {
+            if (playbackInterval) clearInterval(playbackInterval);
+            playbackInterval = setInterval(() => {
+                currentTime++;
+                if (currentTime >= songDatabase[currentSongIndex].duration) {
+                    handleSongEnd();
+                }
+                updateProgress();
+            }, 1000);
+        }
+
+        function stopPlayback() {
+            if (playbackInterval) clearInterval(playbackInterval);
+        }
+
+        function updateProgress() {
+            const progress = (currentTime / songDatabase[currentSongIndex].duration) * 100;
+            progressFilled.style.width = `${progress}%`;
+            currentTimeDisplay.textContent = formatTime(currentTime);
+        }
+
+        function handleSongEnd() {
+            if (repeatMode === 'one') {
+                currentTime = 0;
+                updateProgress();
+            } else if (repeatMode === 'all' || !isShuffled) {
+                playNext();
+            } else {
+                playRandomSong();
+            }
+        }
+
+        // Navigation functions
+        function playNext() {
+            if (isShuffled) {
+                playRandomSong();
+            } else {
+                currentSongIndex = (currentSongIndex + 1) % songDatabase.length;
+                playSong(currentSongIndex);
+            }
+        }
+
+        function playPrevious() {
+            if (currentTime > 3) {
+                currentTime = 0;
+                updateProgress();
+            } else if (isShuffled) {
+                playRandomSong();
+            } else {
+                currentSongIndex = (currentSongIndex - 1 + songDatabase.length) % songDatabase.length;
+                playSong(currentSongIndex);
+            }
+        }
+
+        function playRandomSong() {
+            const newIndex = Math.floor(Math.random() * songDatabase.length);
+            currentSongIndex = newIndex;
+            playSong(currentSongIndex);
+        }
+
+        function playSong(index) {
+            currentTime = 0;
+            updateSongInfo(songDatabase[index]);
+            if (isPlaying) {
+                stopPlayback();
+                startPlayback();
+            }
+        }
+
+        // Toggle functions
+        function toggleShuffle() {
+            isShuffled = !isShuffled;
+            shuffleBtn.style.color = isShuffled ? '#1db954' : '#b3b3b3';
+        }
+
+        function toggleRepeat() {
+            const modes = ['none', 'all', 'one'];
+            const currentIndex = modes.indexOf(repeatMode);
+            repeatMode = modes[(currentIndex + 1) % modes.length];
+            repeatBtn.style.color = repeatMode === 'none' ? '#b3b3b3' : '#1db954';
+            repeatBtn.innerHTML = repeatMode === 'one' ? 
+                '<i class="fas fa-redo">1</i>' : 
+                '<i class="fas fa-redo"></i>';
+        }
+
+        function toggleLike() {
+            const heart = likeBtn.querySelector('i');
+            if (heart.classList.contains('far')) {
+                heart.classList.remove('far');
+                heart.classList.add('fas');
+                heart.style.color = '#1db954';
+            } else {
+                heart.classList.remove('fas');
+                heart.classList.add('far');
+                heart.style.color = '#b3b3b3';
+            }
+        }
+
+        // Search functionality
+        function performSearch(query) {
+            query = query.toLowerCase();
+            const results = songDatabase.filter(song => 
+                song.title.toLowerCase().includes(query) ||
+                song.artist.toLowerCase().includes(query) ||
+                song.genre.toLowerCase().includes(query) ||
+                song.language.toLowerCase().includes(query)
+            );
+
+            if (query.length > 0) {
+                displaySearchResults(results);
+                searchResults.style.display = 'block';
+                musicContent.style.display = 'none';
+            } else {
+                searchResults.style.display = 'none';
+                musicContent.style.display = 'block';
+            }
+        }
+
+        function displaySearchResults(results) {
+            resultsGrid.innerHTML = results.map(song => `
+                <div class="result-card" data-song-id="${song.id}">
+                    <img src="${song.cover}" alt="${song.title}">
+                    <h4>${song.title}</h4>
+                    <p>${song.artist}</p>
+                    <span class="genre-tag">${song.genre}</span>
+                    <span class="genre-tag">${song.language}</span>
+                </div>
+            `).join('');
+
+            resultsGrid.querySelectorAll('.result-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const songId = card.dataset.songId;
+                    const songIndex = songDatabase.findIndex(song => song.id === songId);
+                    if (songIndex !== -1) {
+                        currentSongIndex = songIndex;
+                        playSong(currentSongIndex);
+                        if (!isPlaying) togglePlay();
+                    }
+                });
+            });
+        }
+
+        // Create playlist sections
+        function createPlaylistSection(genre) {
+            const songs = songDatabase.filter(song => song.genre === genre).slice(0, 10);
+            const section = document.createElement('div');
+            section.className = 'playlist-section';
+            section.innerHTML = `
+                <h2>${genre} Hits</h2>
+                <div class="playlist-grid">
+                    ${songs.map(song => `
+                        <div class="playlist-card" data-song-id="${song.id}">
+                            <img src="${song.cover}" alt="${song.title}">
+                            <h4>${song.title}</h4>
+                            <p>${song.artist}</p>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            musicContent.appendChild(section);
+
+            section.querySelectorAll('.playlist-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const songId = card.dataset.songId;
+                    const songIndex = songDatabase.findIndex(song => song.id === songId);
+                    if (songIndex !== -1) {
+                        currentSongIndex = songIndex;
+                        playSong(currentSongIndex);
+                        if (!isPlaying) togglePlay();
+                    }
+                });
+            });
+        }
+
+        // Event Listeners
+        playBtn.addEventListener('click', togglePlay);
+        nextBtn.addEventListener('click', playNext);
+        prevBtn.addEventListener('click', playPrevious);
+        shuffleBtn.addEventListener('click', toggleShuffle);
+        repeatBtn.addEventListener('click', toggleRepeat);
+        likeBtn.addEventListener('click', toggleLike);
+
+        progressBar.addEventListener('click', (e) => {
+            const clickPosition = e.offsetX / progressBar.offsetWidth;
+            currentTime = Math.floor(clickPosition * songDatabase[currentSongIndex].duration);
+            updateProgress();
+        });
+
+        volumeBar.addEventListener('click', (e) => {
+            const newVolume = e.offsetX / volumeBar.offsetWidth;
+            volume = Math.max(0, Math.min(1, newVolume));
+            volumeFilled.style.width = `${volume * 100}%`;
+        });
+
+        searchInput.addEventListener('input', (e) => {
+            performSearch(e.target.value);
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.target.tagName === 'INPUT') return;
+
+            switch(e.key.toLowerCase()) {
+                case ' ':
+                    e.preventDefault();
+                    togglePlay();
+                    break;
+                case 'arrowright':
+                    playNext();
+                    break;
+                case 'arrowleft':
+                    playPrevious();
+                    break;
+                case 'l':
+                    toggleLike();
+                    break;
+                case 's':
+                    toggleShuffle();
+                    break;
+                case 'r':
+                    toggleRepeat();
+                    break;
+                case 'm':
+                    e.preventDefault();
+                    if (volume > 0) {
+                        previousVolume = volume;
+                        volume = 0;
+                    } else {
+                        volume = previousVolume || 0.7;
+                    }
+                    volumeFilled.style.width = `${volume * 100}%`;
+                    break;
+            }
+
+            if (e.ctrlKey) {
+                if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    volume = Math.min(1, volume + 0.1);
+                    volumeFilled.style.width = `${volume * 100}%`;
+                } else if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    volume = Math.max(0, volume - 0.1);
+                    volumeFilled.style.width = `${volume * 100}%`;
+                }
+            }
+        });
+
+        // Navigation functions
+        function switchSection(sectionId) {
+            // Remove active class from all links
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // Add active class to clicked link
+            document.querySelector(`a[href="#${sectionId}"]`).classList.add('active');
+
+            // Handle section display
+            switch(sectionId) {
+                case 'home':
+                    searchResults.style.display = 'none';
+                    musicContent.style.display = 'block';
+                    break;
+                case 'search':
+                    searchResults.style.display = 'block';
+                    musicContent.style.display = 'none';
+                    searchInput.focus();
+                    break;
+                case 'library':
+                    // Show liked songs and playlists
+                    break;
+                case 'create-playlist':
+                    // Show playlist creation interface
+                    break;
+                case 'liked-songs':
+                    // Show liked songs
+                    break;
+            }
+        }
+
+        // Initialize with all genres including Sinhala
+        ['Pop', 'Rock', 'Hip Hop', 'K-Pop', 'Bollywood', 'Latin', 'J-Pop', 'Arabic', 'Sinhala'].forEach(createPlaylistSection);
+
+        // Update cover images for all songs
+        songDatabase.forEach((song, index) => {
+            if (song.genre === 'Pop') {
+                song.cover = `https://source.unsplash.com/300x300/?pop,music&sig=${index}`;
+            } else if (song.genre === 'Rock') {
+                song.cover = `https://source.unsplash.com/300x300/?rock,music&sig=${index}`;
+            } else if (song.genre === 'Hip Hop') {
+                song.cover = `https://source.unsplash.com/300x300/?hiphop,music&sig=${index}`;
+            } else if (song.genre === 'K-Pop') {
+                song.cover = `https://source.unsplash.com/300x300/?kpop,music&sig=${index}`;
+            } else if (song.genre === 'Bollywood') {
+                song.cover = `https://source.unsplash.com/300x300/?bollywood,india&sig=${index}`;
+            } else if (song.genre === 'Latin') {
+                song.cover = `https://source.unsplash.com/300x300/?latin,music&sig=${index}`;
+            } else if (song.genre === 'J-Pop') {
+                song.cover = `https://source.unsplash.com/300x300/?japan,music&sig=${index}`;
+            } else if (song.genre === 'Arabic') {
+                song.cover = `https://source.unsplash.com/300x300/?arabic,music&sig=${index}`;
+            }
+        });
+
+        // Initialize
+        updateSongInfo(songDatabase[currentSongIndex]);
+    </script>
+</body>
+</html> 
